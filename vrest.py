@@ -263,7 +263,7 @@ def delete_nic(vm_id, index):
 
 def get_power(vm_id):
     '''
-    Returns the power state of the VM
+    Returns the power state of the VM.
     Example: vrest.get_power("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
     '''
     response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/power", \
@@ -272,7 +272,7 @@ def get_power(vm_id):
 
 def update_power(vm_id, params):
     '''
-    Update the power state of a VM
+    Update the power state of a VM.
     No examples since this always fails for me
     '''
     response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/power", \
@@ -282,17 +282,38 @@ def update_power(vm_id, params):
 # VM Shared Folders Management
 
 def get_sharedfolders(vm_id):
-    pass
+    '''
+    Returns all shared folders mounted in the VM.
+    Example: vrest.get_sharedfolders("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/sharedfolders", \
+        headers=sp.headers)
+    return check_response(response)
 
 def update_sharedfolder(vm_id, folder_id, params):
-    pass
+    '''
+    Updates a shared folder mounted in the VM.
+    Example: vrest.update_sharedfolder("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", "string", {"folder_id": "1", "host_path": "C:\sharedfolder2"})
+    '''
+    response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/sharedfolders/" + folder_id, \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def create_sharedfolder(vm_id, params):
-    pass
+    '''
+    Mounts a new shared folder the VM.
+    Example: vrest.create_sharedfolder("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", {"folder_id": "string", "host_path": "C:\sharedfolder", "flags": 0})
+    Note: Folder must already be created
+    '''
+    response = requests.post(sp.base_request_string + "/vms/" + vm_id + "/sharedfolders", \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def delete_sharedfolder(vm_id, folder_id):
-    pass
-
-
-authenticate("georg", "qwe123QWE!@#")
-print("Authenticated to server.")
+    '''
+    Deletes a shared folder in the VM.
+    Example: vrest.delete_sharedfolder("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", "string")
+    '''
+    response = requests.delete(sp.base_request_string + "/vms/" + vm_id + "/sharedfolders/" + folder_id, \
+        headers=sp.headers)
+    return check_response(response)
