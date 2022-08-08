@@ -23,9 +23,15 @@ def check_response(response):
     elif response.status_code == 204:
         logging.info("Request successful, no output")
         return {}
+    elif response.status_code == 404:
+        logging.info("Request returned 404")
+        return response.content
     else:
         logging.warning("Unknown status %d for request" % response.status_code)
-    return json.loads(response.content.decode("ascii"))
+    if response.content:
+        return json.loads(response.content.decode("ascii"))
+    else:
+        return {}
 
 def authenticate(user, password):
     ''' 
@@ -125,31 +131,86 @@ def delete_portforward(vmnet, protocol, port):
 # VM Management
 
 def get_vms():
-    pass
+    '''
+    Returns a list of VM IDs and paths for all VMs
+    Example: vrest.get_vms()
+    '''
+    response = requests.get(sp.base_request_string + "/vms", \
+        headers=sp.headers)
+    return check_response(response)
 
 def get_vm(vm_id):
-    pass
+    '''
+    Returns the VM Settings for a VM
+    Example: vrest.get_vm("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id, \
+        headers=sp.headers)
+    return check_response(response)
 
-def get_vm_config(vm_id):
-    pass
+def get_vm_config(vm_id, params):
+    '''
+    Returns the VM Config for a VM
+    Example: vrest.get_config("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", "string")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/params/" + params, \
+        headers=sp.headers)
+    return check_response(response)
 
 def get_vm_restrictions(vm_id):
-    pass
+    '''
+    Returns the VM restrictions information
+    Example: vrest.get_vm_restrictions("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/restrictions", \
+        headers=sp.headers)
+    return check_response(response)
 
 def update_vm(vm_id, params):
-    pass
+    '''
+    Updates the VM Settings
+    Example: vrest.update_vm("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", {"memory":4096})
+    '''
+    response = requests.put(sp.base_request_string + "/vms/" + vm_id, \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def update_vm_config(vm_id, params):
-    pass
+    '''
+    Updates the VM Config parameters
+    Example: vrest.update_vm_config("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", {"memory":4096})
+    '''
+    response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/configparams", \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def copy_vm(params):
-    pass
+    '''
+    Creates a copy of the given VM.
+    Example: vrest.copy_vm({"id": "CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", "cpu": {"processors": 1},
+        "memory": 512, "name": "New VM", "parentID": "CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M"})
+    '''
+    response = requests.post(sp.base_request_string + "/vms", \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def register_vm(params):
-    pass
+    '''
+    Registers a VM to the VM library.
+    Example: vrest.register_vm({"id": 'R00MBA5HVMN0L3SULC0DQMDSL6TSO3CE', "path": "C:\\Users\\georg\\Downloads\\cp7_30_22\\cpxv_exrd_e_ubu16\\cpxv_exrd_e_ubu16\\cpxv_exrd_e_ubu16.vmx", "name": "New VM"})
+    '''
+    response = requests.post(sp.base_request_string + "/vms/registration", \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def delete_vm(vm_id):
-    pass
+    '''
+    Deletes a VM
+    Example: vrest.delete_vm('4FK20QNKTVHGNSEF2GLJ86MOA7C63559')
+    '''
+    response = requests.delete(sp.base_request_string + "/vms/" + vm_id, \
+        headers=sp.headers)
+    return check_response(response)
 
 # VM Network Adapters Management
 
