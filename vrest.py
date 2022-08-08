@@ -61,7 +61,7 @@ def set_port(port):
 
 def get_vmnets():
     '''
-    Returns all virtual networks
+    Returns all virtual networks.
     Example: vrest.get_vmnets()
     '''
     response = requests.get(sp.base_request_string + "/vmnet", \
@@ -70,7 +70,7 @@ def get_vmnets():
 
 def get_vmnet_mactoip(vmnet):
     '''
-    Returns all MAC-To-IP settings for DHCP service for a specific vmnet
+    Returns all MAC-To-IP settings for DHCP service for a specific vmnet.
     Example: vrest.get_vmnet_mactoip("vmnet8")
     '''
     response = requests.get(sp.base_request_string + "/vmnet/" + vmnet + "/mactoip", \
@@ -79,7 +79,7 @@ def get_vmnet_mactoip(vmnet):
 
 def get_vmnet_portforward(vmnet):
     '''
-    Returns all port forwardings for a specific vmnet
+    Returns all port forwardings for a specific vmnet.
     Example: vrest.get_vmnet_portforward("vmnet8")
     '''
     response = requests.get(sp.base_request_string + "/vmnet/" + vmnet + "/portforward", \
@@ -88,7 +88,7 @@ def get_vmnet_portforward(vmnet):
 
 def update_vmnet_mactoip(vmnet, mac, params):
     '''
-    Updates the Mac-To-IP binding for a specific vmnet
+    Updates the Mac-To-IP binding for a specific vmnet.
     Example: vrest.update_vmnet_mactoip("vmnet1", "00:00:00:00:00:00", {"IP": "125.5.5.5"})
     '''
     response = requests.put(sp.base_request_string + "/vmnet/" + vmnet + "/mactoip/" + mac, \
@@ -97,7 +97,7 @@ def update_vmnet_mactoip(vmnet, mac, params):
 
 def update_portforward(vmnet, protocol, port, params):
     '''
-    Updates Port Forwarding for a specific vmnet
+    Updates Port Forwarding for a specific vmnet.
     Example: vrest.update_portforward("vmnet8", "tcp", "50000", {"ip": "192.168.1.128", "port": 40000, "desc": "test rule"})
     '''
     response = requests.put(sp.base_request_string + "/vmnet/" + vmnet + "/portforward/" + protocol + "/" + str(port), \
@@ -132,7 +132,7 @@ def delete_portforward(vmnet, protocol, port):
 
 def get_vms():
     '''
-    Returns a list of VM IDs and paths for all VMs
+    Returns a list of VM IDs and paths for all VMs.
     Example: vrest.get_vms()
     '''
     response = requests.get(sp.base_request_string + "/vms", \
@@ -141,7 +141,7 @@ def get_vms():
 
 def get_vm(vm_id):
     '''
-    Returns the VM Settings for a VM
+    Returns the VM Settings for a VM.
     Example: vrest.get_vm("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
     '''
     response = requests.get(sp.base_request_string + "/vms/" + vm_id, \
@@ -150,7 +150,7 @@ def get_vm(vm_id):
 
 def get_vm_config(vm_id, params):
     '''
-    Returns the VM Config for a VM
+    Returns the VM Config for a VM.
     Example: vrest.get_config("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", "string")
     '''
     response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/params/" + params, \
@@ -159,7 +159,7 @@ def get_vm_config(vm_id, params):
 
 def get_vm_restrictions(vm_id):
     '''
-    Returns the VM restrictions information
+    Returns the VM restrictions information.
     Example: vrest.get_vm_restrictions("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
     '''
     response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/restrictions", \
@@ -168,7 +168,7 @@ def get_vm_restrictions(vm_id):
 
 def update_vm(vm_id, params):
     '''
-    Updates the VM Settings
+    Updates the VM Settings.
     Example: vrest.update_vm("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", {"memory":4096})
     '''
     response = requests.put(sp.base_request_string + "/vms/" + vm_id, \
@@ -177,7 +177,7 @@ def update_vm(vm_id, params):
 
 def update_vm_config(vm_id, params):
     '''
-    Updates the VM Config parameters
+    Updates the VM Config parameters.
     Example: vrest.update_vm_config("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", {"memory":4096})
     '''
     response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/configparams", \
@@ -205,7 +205,7 @@ def register_vm(params):
 
 def delete_vm(vm_id):
     '''
-    Deletes a VM
+    Deletes a VM.
     Example: vrest.delete_vm('4FK20QNKTVHGNSEF2GLJ86MOA7C63559')
     '''
     response = requests.delete(sp.base_request_string + "/vms/" + vm_id, \
@@ -215,27 +215,69 @@ def delete_vm(vm_id):
 # VM Network Adapters Management
 
 def get_ip(vm_id):
-    pass
+    '''
+    Returns the IP address of a VM.
+    Example: vrest.get_ip("QT430U31KQEGRAPPSIHPCI5V724M90KB")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/ip", \
+        headers=sp.headers)
+    return check_response(response)
 
 def get_nics(vm_id):
-    pass
+    '''
+    Returns all network adapters in the VM.
+    Example: vrest.get_nics("QT430U31KQEGRAPPSIHPCI5V724M90KB")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/nic", \
+        headers=sp.headers)
+    return check_response(response)
 
 def update_nic(vm_id, index, params):
-    pass
+    '''
+    Updates a network adapter in the VM.
+    Example: vrest.update_nic("QT430U31KQEGRAPPSIHPCI5V724M90KB", "1", {"type":"custom", "vmnet":"string"})
+    '''
+    response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/nic/" + str(index), \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def create_nic(vm_id, params):
-    pass
+    '''
+    Creates a network adapter in the VM.
+    Example: vrest.create_nic("QT430U31KQEGRAPPSIHPCI5V724M90KB", {"type":"custom", "vmnet":"string"}
+    '''
+    response = requests.post(sp.base_request_string + "/vms/" + vm_id + "/nic", \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 def delete_nic(vm_id, index):
-    pass
+    '''
+    Deletes a VM's network adapter.
+    Example: vrest.delete_nic("QT430U31KQEGRAPPSIHPCI5V724M90KB", 2)
+    '''
+    response = requests.delete(sp.base_request_string + "/vms/" + vm_id + "/nic/" + str(index), \
+        headers=sp.headers)
+    return check_response(response)
 
 # VM Power Management
 
 def get_power(vm_id):
-    pass
+    '''
+    Returns the power state of the VM
+    Example: vrest.get_power("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M")
+    '''
+    response = requests.get(sp.base_request_string + "/vms/" + vm_id + "/power", \
+        headers=sp.headers)
+    return check_response(response)
 
 def update_power(vm_id, params):
-    pass
+    '''
+    Update the power state of a VM
+    No examples since this always fails for me
+    '''
+    response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/power", \
+        headers=sp.headers, json=params)
+    return check_response(response)
 
 # VM Shared Folders Management
 
