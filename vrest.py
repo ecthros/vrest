@@ -273,10 +273,10 @@ def get_power(vm_id):
 def update_power(vm_id, params):
     '''
     Update the power state of a VM.
-    No examples since this always fails for me
+    Example: vrest.update_power("CCOAEHSK2ASF5S5FAS3TQN3TO2CGFJ6M", "on")
     '''
     response = requests.put(sp.base_request_string + "/vms/" + vm_id + "/power", \
-        headers=sp.headers, json=params)
+        headers=sp.headers, data=params)
     return check_response(response)
 
 # VM Shared Folders Management
